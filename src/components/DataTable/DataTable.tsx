@@ -7,6 +7,7 @@ import axios from "axios";
 import { AppDispatch, RootState } from "@/store/store";
 import Pagination from "./Pagination";
 import Search from "./Search";
+import Filters, { FilterOption } from "./Filters";
 
 interface Column {
   key: string;
@@ -15,15 +16,15 @@ interface Column {
 
 interface DataTableProps {
   columns: Column[];
+  filters?: FilterOption[];
   fetchUrl: string;
   dataKey: string;
 }
 
-const DataTable = ({ columns, fetchUrl, dataKey }: DataTableProps) => {
+const DataTable = ({ columns, fetchUrl, dataKey, filters }: DataTableProps) => {
   const dispatch = useDispatch<AppDispatch>();
-  const { itemsPerPage, currentPage, searchQuery } = useSelector(
-    (state: RootState) => state.table,
-  );
+  const { itemsPerPage, currentPage, searchQuery, activeFilter, filterValue } =
+    useSelector((state: RootState) => state.table);
 
   const [data, setData] = useState<any[]>([]); // eslint-disable-line @typescript-eslint/no-explicit-any
   const [loading, setLoading] = useState<boolean>(true);
@@ -33,9 +34,14 @@ const DataTable = ({ columns, fetchUrl, dataKey }: DataTableProps) => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(
-          `${fetchUrl}?limit=${itemsPerPage}&skip=${(currentPage - 1) * itemsPerPage}&select=${columns.map((col) => col.key).join("&select=")}`,
-        );
+        const baseParams = `limit=${itemsPerPage}&skip=${(currentPage - 1) * itemsPerPage}&select=${columns.map((col) => col.key).join("&select=")}`;
+        let url = `${fetchUrl}`;
+        if (activeFilter && filterValue) {
+          url += `/filter?key=${activeFilter}&value=${filterValue}&${baseParams}`;
+        } else {
+          url += `?${baseParams}`;
+        }
+        const response = await axios.get(url);
         setData(response.data[dataKey]);
         setTotalItems(response.data.total);
       } catch (error) {
@@ -45,7 +51,15 @@ const DataTable = ({ columns, fetchUrl, dataKey }: DataTableProps) => {
       }
     };
     fetchData();
-  }, [fetchUrl, itemsPerPage, currentPage, columns, dataKey]);
+  }, [
+    fetchUrl,
+    columns,
+    dataKey,
+    itemsPerPage,
+    currentPage,
+    activeFilter,
+    filterValue,
+  ]);
 
   const filteredData = data.filter((item) =>
     Object.values(item)
@@ -77,7 +91,13 @@ const DataTable = ({ columns, fetchUrl, dataKey }: DataTableProps) => {
         </div>
         <div>|</div>
         <Search />
-        <div>|</div>
+        {/* Filters */}
+        {filters && filters.length > 0 && (
+          <>
+            <div>|</div>
+            <Filters filters={filters} />
+          </>
+        )}
       </div>
 
       {/* Table */}

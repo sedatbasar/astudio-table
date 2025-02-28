@@ -4,14 +4,16 @@ interface TableState {
   itemsPerPage: number;
   currentPage: number;
   searchQuery: string;
-  filter: string;
+  activeFilter: string | null;
+  filterValue: string;
 }
 
 const initialState: TableState = {
   itemsPerPage: 5,
   currentPage: 1,
   searchQuery: "",
-  filter: "",
+  activeFilter: null,
+  filterValue: "",
 };
 
 const tableSlice = createSlice({
@@ -29,13 +31,25 @@ const tableSlice = createSlice({
       state.searchQuery = action.payload;
       state.currentPage = 1; // Reset to first page on search
     },
-    setFilter: (state, action: PayloadAction<string>) => {
-      state.filter = action.payload;
-      state.currentPage = 1; // Reset to first page on filter change
+    setActiveFilter: (state, action: PayloadAction<string | null>) => {
+      state.activeFilter = action.payload;
+      state.filterValue = "";
+      state.currentPage = 1; // Reset to first page on search
     },
+    setFilterValue: (state, action: PayloadAction<string>) => {
+      state.filterValue = action.payload;
+      state.currentPage = 1; // Reset to first page on search
+    },
+    resetTableState: () => initialState,
   },
 });
 
-export const { setItemsPerPage, setCurrentPage, setSearchQuery, setFilter } =
-  tableSlice.actions;
+export const {
+  setItemsPerPage,
+  setCurrentPage,
+  setSearchQuery,
+  setActiveFilter,
+  setFilterValue,
+  resetTableState,
+} = tableSlice.actions;
 export default tableSlice.reducer;

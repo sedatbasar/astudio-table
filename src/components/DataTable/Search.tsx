@@ -1,22 +1,31 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState, AppDispatch } from "@/store/store";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/store/store";
 import { setSearchQuery } from "@/store/tableSlice";
 import Image from "next/image";
 import SearchIcon from "@/assets/svgs/search.svg";
+import debounce from "lodash.debounce";
 
 const Search = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const searchQuery = useSelector(
-    (state: RootState) => state.table.searchQuery,
-  );
+  const [inputValue, setInputValue] = useState("");
   const [isInputVisible, setIsInputVisible] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  // Debounced function to update Redux state (search query)
+  const debouncedSearch = useCallback(
+    debounce((value: string) => {
+      dispatch(setSearchQuery(value));
+    }, 250),
+    [dispatch],
+  );
+
+  // Handle input change
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(setSearchQuery(e.target.value));
+    setInputValue(e.target.value);
+    debouncedSearch(e.target.value);
   };
 
   const toggleSearchInput = () => {
@@ -48,7 +57,7 @@ const Search = () => {
         <input
           ref={inputRef}
           type="text"
-          value={searchQuery}
+          value={inputValue}
           onChange={handleSearchChange}
           placeholder="Search..."
           className="border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue h-8"
