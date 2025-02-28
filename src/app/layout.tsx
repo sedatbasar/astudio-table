@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import localFont from "next/font/local";
+import Breadcrumb from "@/components/Breadcrumb";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -26,10 +27,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${neutraFont.variable} antialiased font-neutra`}
-      >
-        {children}
+      <body className={`${neutraFont.variable} antialiased font-neutra`}>
+        <main className="container mx-auto">
+          <Breadcrumb />
+          {children}
+        </main>
       </body>
     </html>
   );
