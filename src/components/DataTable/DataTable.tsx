@@ -102,14 +102,14 @@ const DataTable = ({ columns, fetchUrl, dataKey }: DataTableProps) => {
           </thead>
           <tbody>
             {loading
-              ? Array(5)
+              ? Array(itemsPerPage)
                   .fill(0)
                   .map((_, idx) => (
                     <tr key={idx} className="animate-pulse">
                       {columns.map((col) => (
                         <td
                           key={col.key}
-                          className="border border-gray-100 p-2 bg-grey h-10"
+                          className="border border-gray-100 p-2 bg-grey h-[41px]"
                         ></td>
                       ))}
                     </tr>
