@@ -6,12 +6,20 @@ import { setActiveFilter, setFilterValue } from "@/store/tableSlice";
 import debounce from "lodash.debounce";
 import { useCallback, useState } from "react";
 
-export interface FilterOption {
+interface BaseFilterOptions {
   key: string;
   label: string;
-  type: "text" | "select";
-  options?: string[]; // Only for type "select"
 }
+
+interface TextFilterOption extends BaseFilterOptions {
+  type: "text";
+}
+interface SelectFilterOption extends BaseFilterOptions {
+  type: "select";
+  options: string[];
+}
+
+export type FilterOption = TextFilterOption | SelectFilterOption;
 
 interface FiltersProps {
   filters: FilterOption[];
