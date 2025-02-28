@@ -23,7 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${neutraFont.variable} antialiased font-neutra`}>
-        <main className="container mx-auto">
+        <main className="container mx-auto px-4">
           <Providers>
             <Breadcrumb />
             {children}

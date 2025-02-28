@@ -2,10 +2,11 @@
 
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setItemsPerPage, setSearchQuery } from "@/store/tableSlice";
+import { setItemsPerPage } from "@/store/tableSlice";
 import axios from "axios";
 import { AppDispatch, RootState } from "@/store/store";
 import Pagination from "./Pagination";
+import Search from "./Search";
 
 interface Column {
   key: string;
@@ -75,16 +76,7 @@ const DataTable = ({ columns, fetchUrl, dataKey }: DataTableProps) => {
           </label>
         </div>
         <div>|</div>
-        {/* Search Input */}
-        <div>
-          <input
-            type="text"
-            placeholder="Search..."
-            className="border rounded p-1"
-            value={searchQuery}
-            onChange={(e) => dispatch(setSearchQuery(e.target.value))}
-          />
-        </div>
+        <Search />
         <div>|</div>
       </div>
 
