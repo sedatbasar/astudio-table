@@ -20,14 +20,17 @@ The application is deployed on **[Vercel](https://astudio-table.vercel.app/)** a
 ## 📦 Project Setup
 
 ### **1️⃣ Install Dependencies**
+
 ```sh
 npm install
 ```
 
 ### **2️⃣ Run the Development Server**
+
 ```sh
 npm run dev
 ```
+
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
@@ -35,18 +38,21 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 ## ⚙️ **Implementation Details**
 
 ### **🔹 Users Page (`/users`)**
+
 - Fetches data from `https://dummyjson.com/users`
 - Filters: **Name (text), Email (text), Age (select), Gender (select)**
 - Uses `/users/filter?key={filterKey}&value={filterValue}` for filtering
 - Displays **dynamic columns** with pagination and search
 
 ### **🔹 Products Page (`/products`)**
+
 - Fetches data from `https://dummyjson.com/products`
 - **Only supports Category filtering** (API does not support Title or Brand)
 - Uses `/products/category/{categoryName}` for filtering
 - Dynamically fetches category list from `https://dummyjson.com/products/categories`
 
 ### **🔹 Filters System**
+
 - Click on a filter to open an **input field or dropdown** (depending on type)
 - Filtering **sends a request to the API** and updates the results
 - **Users & Products have different API endpoints for filtering**, handled dynamically
@@ -54,25 +60,29 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 ---
 
 ## 🛠 **GitHub Actions CI/CD**
+
 This project has **automated checks** using GitHub Actions:
 ✅ **Linting** (`eslint`)  
 ✅ **Code Formatting** (`prettier`)  
-✅ **Type Checking** (`tsc`)  
+✅ **Type Checking** (`tsc`)
 
 Whenever you push changes, these checks **run automatically**.
 
 ---
 
 ## 🚀 **Live Demo**
+
 The app is deployed on **Vercel**:  
-🔗 **[astudio-table.vercel.app](https://astudio-table.vercel.app/)**  
+🔗 **[astudio-table.vercel.app](https://astudio-table.vercel.app/)**
 
 ---
 
 ## 📜 **Additional Notes**
+
 - The requirements **were unclear about filtering**, so I implemented a **flexible approach** where filters dynamically change based on type (text/select).
 - The **Products Page filtering requirement** was unclear, so I followed the **same pattern as Users Page**, but **with different columns & filters**.
 - The API **only supports filtering by Category** on Products, so I implemented **only Category filtering** instead of Title/Brand.
 
 ---
+
 💡 **Built with ❤️ using Next.js, TypeScript, Tailwind & Redux Toolkit** 🚀
