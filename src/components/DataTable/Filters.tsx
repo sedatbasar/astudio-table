@@ -58,7 +58,7 @@ const Filters = ({ filters }: FiltersProps) => {
       {filters.map((filter) => (
         <button
           key={filter.key}
-          className={`px-3 py-1 border rounded ${
+          className={`px-3 py-1 border rounded cursor-pointer ${
             activeFilter === filter.key ? "bg-blue text-white" : "bg-white"
           }`}
           onClick={() => handleFilterChange(filter.key)}

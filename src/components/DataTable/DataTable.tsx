@@ -3,25 +3,39 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setItemsPerPage } from "@/store/tableSlice";
-import axios from "axios";
 import { AppDispatch, RootState } from "@/store/store";
 import Pagination from "./Pagination";
 import Search from "./Search";
 import Filters, { FilterOption } from "./Filters";
+import api from "@/utils/api";
 
 interface Column {
   key: string;
   label: string;
 }
 
-interface DataTableProps {
+interface BaseDataTableProps {
   columns: Column[];
-  filters?: FilterOption[];
-  fetchUrl: string;
   dataKey: string;
 }
 
-const DataTable = ({ columns, fetchUrl, dataKey, filters }: DataTableProps) => {
+interface DataTableWithFiltersProps extends BaseDataTableProps {
+  filters: FilterOption[];
+  generateFilterUrlFn: (activeFilter: string, filterValue: string) => string;
+}
+interface DataTableWithoutFiltersProps extends BaseDataTableProps {
+  filters?: undefined;
+  generateFilterUrlFn?: undefined;
+}
+
+type DataTableProps = DataTableWithoutFiltersProps | DataTableWithFiltersProps;
+
+const DataTable = ({
+  columns,
+  dataKey,
+  filters,
+  generateFilterUrlFn,
+}: DataTableProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const { itemsPerPage, currentPage, searchQuery, activeFilter, filterValue } =
     useSelector((state: RootState) => state.table);
@@ -35,13 +49,13 @@ const DataTable = ({ columns, fetchUrl, dataKey, filters }: DataTableProps) => {
       setLoading(true);
       try {
         const baseParams = `limit=${itemsPerPage}&skip=${(currentPage - 1) * itemsPerPage}&select=${columns.map((col) => col.key).join("&select=")}`;
-        let url = `${fetchUrl}`;
+        let url = `/${dataKey}`;
         if (activeFilter && filterValue) {
-          url += `/filter?key=${activeFilter}&value=${filterValue}&${baseParams}`;
+          url += `${generateFilterUrlFn?.(activeFilter, filterValue)}&${baseParams}`;
         } else {
           url += `?${baseParams}`;
         }
-        const response = await axios.get(url);
+        const response = await api.get(url);
         setData(response.data[dataKey]);
         setTotalItems(response.data.total);
       } catch (error) {
@@ -51,15 +65,7 @@ const DataTable = ({ columns, fetchUrl, dataKey, filters }: DataTableProps) => {
       }
     };
     fetchData();
-  }, [
-    fetchUrl,
-    columns,
-    dataKey,
-    itemsPerPage,
-    currentPage,
-    activeFilter,
-    filterValue,
-  ]);
+  }, [columns, dataKey, itemsPerPage, currentPage, activeFilter, filterValue]);
 
   const filteredData = data.filter((item) =>
     Object.values(item)
@@ -71,7 +77,7 @@ const DataTable = ({ columns, fetchUrl, dataKey, filters }: DataTableProps) => {
   return (
     <div>
       {/* Filters & Search */}
-      <div className="flex gap-4 items-center mb-4">
+      <div className="flex gap-4 items-center mb-8">
         {/* Items Per Page */}
         <div>
           <select

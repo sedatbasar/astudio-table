@@ -42,12 +42,16 @@ export default function Users() {
       dispatch(resetTableState());
     };
   }, []);
+  const generateFilterUrlFn = (activeFilter: string, filterValue: string) => {
+    return `/filter?key=${activeFilter}&value=${filterValue}`;
+  };
+
   return (
     <DataTable
       columns={columns}
       filters={filters}
-      fetchUrl="https://dummyjson.com/users"
       dataKey="users"
+      generateFilterUrlFn={generateFilterUrlFn}
     />
   );
 }
