@@ -1,10 +1,7 @@
 "use client";
+
 import { DataTable } from "@/components/DataTable";
 import { FilterOption } from "@/components/DataTable/Filters";
-import { AppDispatch } from "@/store/store";
-import { resetTableState } from "@/store/tableSlice";
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
 
 const columns = [
   { key: "firstName", label: "First Name" },
@@ -13,9 +10,12 @@ const columns = [
   { key: "age", label: "Age" },
   { key: "gender", label: "Gender" },
   { key: "email", label: "Email" },
+  { key: "phone", label: "Phone" },
+  { key: "birthDate", label: "Birth Date" },
   { key: "username", label: "User Name" },
   { key: "bloodGroup", label: "Blood Group" },
   { key: "eyeColor", label: "Eye Color" },
+  { key: "height", label: "Height" },
 ];
 
 const filters = [
@@ -36,12 +36,6 @@ const filters = [
 ] satisfies FilterOption[];
 
 export default function Users() {
-  const dispatch = useDispatch<AppDispatch>();
-  useEffect(() => {
-    return () => {
-      dispatch(resetTableState());
-    };
-  }, []);
   const generateFilterUrlFn = (activeFilter: string, filterValue: string) => {
     return `/filter?key=${activeFilter}&value=${filterValue}`;
   };

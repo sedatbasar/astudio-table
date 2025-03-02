@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setItemsPerPage } from "@/store/tableSlice";
+import { resetTableState, setItemsPerPage } from "@/store/tableSlice";
 import { AppDispatch, RootState } from "@/store/store";
 import Pagination from "./Pagination";
 import Search from "./Search";
@@ -43,6 +43,12 @@ const DataTable = ({
   const [data, setData] = useState<any[]>([]); // eslint-disable-line @typescript-eslint/no-explicit-any
   const [loading, setLoading] = useState<boolean>(true);
   const [totalItems, setTotalItems] = useState<number>(0);
+
+  useEffect(() => {
+    return () => {
+      dispatch(resetTableState());
+    };
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {

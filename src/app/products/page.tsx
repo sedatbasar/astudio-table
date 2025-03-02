@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { resetTableState } from "@/store/tableSlice";
 import { DataTable } from "@/components/DataTable";
 import { FilterOption } from "@/components/DataTable/Filters";
 import api from "@/utils/api";
@@ -12,6 +11,7 @@ const productColumns = [
   { key: "description", label: "Description" },
   { key: "category", label: "Category" },
   { key: "price", label: "Price" },
+  { key: "discountPercentage", label: "Discount Percentage" },
   { key: "rating", label: "Rating" },
   { key: "brand", label: "Brand" },
   { key: "warrantyInformation", label: "Warranty Information" },
@@ -45,12 +45,6 @@ const ProductsPage = () => {
   const productFilters = [
     { label: "Category", type: "select", key: "category", options: categories },
   ] satisfies FilterOption[];
-
-  useEffect(() => {
-    return () => {
-      dispatch(resetTableState());
-    };
-  }, [dispatch]);
 
   return (
     <DataTable
