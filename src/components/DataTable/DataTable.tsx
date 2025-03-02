@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { resetTableState, setItemsPerPage } from "@/store/tableSlice";
 import { AppDispatch, RootState } from "@/store/store";
@@ -12,6 +12,7 @@ import api from "@/utils/api";
 interface Column {
   key: string;
   label: string;
+  cellRenderer?: (value: any) => ReactNode; // eslint-disable-line @typescript-eslint/no-explicit-any
 }
 
 interface BaseDataTableProps {
@@ -142,7 +143,9 @@ const DataTable = ({
                   <tr key={index} className="hover:bg-grey">
                     {columns.map((col) => (
                       <td key={col.key} className="border p-2 border-grey">
-                        {row[col.key]}
+                        {col.cellRenderer
+                          ? col.cellRenderer(row[col.key])
+                          : row[col.key]}
                       </td>
                     ))}
                   </tr>

@@ -10,7 +10,11 @@ const productColumns = [
   { key: "title", label: "Title" },
   { key: "description", label: "Description" },
   { key: "category", label: "Category" },
-  { key: "price", label: "Price" },
+  {
+    key: "price",
+    label: "Price",
+    cellRenderer: (value: number) => `$${value}`,
+  },
   { key: "discountPercentage", label: "Discount Percentage" },
   { key: "rating", label: "Rating" },
   { key: "brand", label: "Brand" },
@@ -18,7 +22,11 @@ const productColumns = [
   { key: "shippingInformation", label: "Shipping Information" },
   { key: "availabilityStatus", label: "Availability Status" },
   { key: "sku", label: "SKU" },
-  { key: "weight", label: "Weight" },
+  {
+    key: "weight",
+    label: "Weight",
+    cellRenderer: (value: number) => `${value}kg`,
+  },
 ];
 
 const ProductsPage = () => {

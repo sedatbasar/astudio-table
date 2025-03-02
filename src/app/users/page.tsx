@@ -15,7 +15,11 @@ const columns = [
   { key: "username", label: "User Name" },
   { key: "bloodGroup", label: "Blood Group" },
   { key: "eyeColor", label: "Eye Color" },
-  { key: "height", label: "Height" },
+  {
+    key: "height",
+    label: "Height",
+    cellRenderer: (value: string) => `${value}cm`,
+  },
 ];
 
 const filters = [
